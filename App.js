@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import auth from "@react-native-firebase/auth";
-import { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { useState } from "react";
 import InNav from "./navigator/InNav";
 import OutNav from "./navigator/OutNav";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,8 +19,10 @@ export default function App() {
     });
   }, []);
   return (
-    <NavigationContainer>
-      {isLoggedIn ? <InNav /> : <OutNav />}
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        {isLoggedIn ? <InNav /> : <OutNav />}
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }
