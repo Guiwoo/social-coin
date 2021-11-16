@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { View } from "react-native";
 import { FlatList } from "react-native";
 import { ActivityIndicator } from "react-native";
 import { useQuery } from "react-query";
 import styled from "styled-components/native";
 import { coins } from "../api";
 import { BLACK_COLOR } from "../colors";
+import Coin from "../component/Coin";
 
 const Container = styled.View`
   flex: 1;
@@ -16,14 +18,10 @@ const Loader = styled.View`
   align-items: center;
   background-color: ${BLACK_COLOR};
 `;
-const Coin = styled.View`
-  align-items: center;
-`;
-const CoinName = styled.Text`
-  color: white;
-`;
-const CoinSymbol = styled.Text`
-  color: white;
+const List = styled.FlatList`
+  padding: 20px 10px;
+  width: 100%;
+  flex: 1;
 `;
 
 const Home = () => {
@@ -43,14 +41,16 @@ const Home = () => {
   }
   return (
     <Container>
-      <FlatList
-        numColumns={5}
+      <List
+        columnWrapperStyle={{
+          justifyContent: "space-between",
+        }}
+        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        numColumns={3}
         data={cleanData}
-        renderItem={({ item }) => (
-          <Coin>
-            <CoinName>{item.name}</CoinName>
-            <CoinSymbol>{item.symbol}</CoinSymbol>
-          </Coin>
+        keyExtractor={(item) => item.id}
+        renderItem={({ item, index }) => (
+          <Coin index={index} id={item.id} symbol={item.symbol} />
         )}
       />
     </Container>
